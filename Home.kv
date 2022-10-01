@@ -1,0 +1,100 @@
+Home:
+	id: home
+	name: "home"
+	
+	BoxLayout:
+		orientation: 'vertical'
+		
+		canvas.before:
+			Color:
+				rgba: (32/255, 74/255, 93/255, 1)
+			
+			Rectangle:
+				size: self.size
+				pos: self.pos
+
+		FloatLayout:
+			cols: 1
+			size_hint: (1, .8)
+			canvas.before:
+				Color:
+					rgba: (.8, 0, 0, .87)
+				Ellipse:
+					size: self.size[0]*1.5, self.size[1]*2
+                    pos: -120, self.pos[1]
+
+			Image:
+				allow_stretch: True
+				pos_hint: {'center_x': .5, 'center_y': .5}
+				source: "images/logo.png"
+		
+		GridLayout:
+			cols: 1
+			padding: dp(5)
+			
+			MDLabel:
+				text: '[b]Por favor, Seleccione una opción.[/b]'
+				theme_text_color: 'Custom'
+				text_color: (1, 1, 1, 1)
+				font_size: dp(22)
+				size_hint: 1, .4
+				markup: True
+				halign: 'left'
+				#valign: 'center'
+			
+			FloatLayout:
+				cols: 1
+				padding: dp(5), dp(5), dp(5), dp(5)
+				spacing: dp(5)
+				
+				MDRectangleFlatIconButton:
+					text: "Iniciar Sesion"
+					theme_text_color: 'Custom'
+					text_color: (1, 1, 1, 1)
+					line_color: (1, 1, 1, 1)
+					icon: 'login'
+					icon_color: (1, 1, 1, 1)
+					disabled: False
+					size_hint:  .7, .2
+					pos_hint: {'top': 1}
+					x: 20
+					on_release: app.root.current = "login"
+
+				MDRectangleFlatIconButton:
+					text: "Registrarse"
+					theme_text_color: 'Custom'
+					text_color: (1, 1, 1, 1)
+					line_color: (1, 1, 1, 1)
+					icon: 'pencil'
+					icon_color: (1, 1, 1, 1)
+					disabled: False
+					size_hint: .7, .2
+					pos_hint: {'top': .75}
+					x: 40
+					on_release: app.root.current = "join"
+					
+				MDRectangleFlatIconButton:
+					text: "Mas Información"
+					theme_text_color: 'Custom'
+					text_color: (1, 1, 1, 1)
+					line_color: (1, 1, 1, 1)
+					icon: 'information-outline'
+					icon_color: (1, 1, 1, 1)
+					disabled: False
+					size_hint: .7, .2
+					pos_hint: {'top': .5}
+					x: 20
+					on_press: root.openDialog(title='Error', text='Lo sentimos, esta opción no funciona por el momento')
+					
+				MDRectangleFlatIconButton:
+					text: "Ayuda"
+					theme_text_color: 'Custom'
+					text_color: (1, 1, 1, 1)
+					line_color: (1, 1, 1, 1)
+					icon: 'help'
+					icon_color: (1, 1, 1, 1)
+					disabled: False
+					size_hint: .7, .2
+					pos_hint: {'top': 0.25}
+					x: 40
+					on_press: root.openDialog(title='Error', text='Lo sentimos, esta opción no funciona por el momento')
