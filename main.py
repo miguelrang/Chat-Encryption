@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from kivy.config import Config
-#Config.set("graphics", "resizable", False)
+Config.set("graphics", "resizable", False)
 
 from kivymd.app import MDApp
 
@@ -108,6 +108,9 @@ class main(MDApp):
 #    registrada.                                  #
 # 2. Validar si ya existe un archivo private.key o#
 #    public.key en el escritorio.                 #
+# 3. Agregar una expresión regular que valide que #
+#    se haya agregado una cuenta de metamask y su #
+#    contraseña.
 # ----------------------------------------------- #
 #                       L O G I N                 #
 # 1. Importar primary external storage.           #

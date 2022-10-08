@@ -161,9 +161,6 @@ class Login(Screen):
 
 				encrypted_key = data[17:len(data)-2]
 
-				print('GET CONTENT FILE')
-				print(encrypted_key)
-
 				return encrypted_key
 
 			except:	
@@ -232,8 +229,6 @@ class Login(Screen):
 										title='Son diferentes',
 										text='Checalas'
 									)
-									print('dec_key_user', decrypted_key_user)
-									print('dec_key_cert', decrypted_key_cert)
 
 							else:
 								self.openDialog(

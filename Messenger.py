@@ -154,10 +154,10 @@ class Messenger(Screen):
 
 			data = json.loads(content_file)
 			account = data["normal"]["email"]
-			print(account, type(account))
-
+			
 			return account
-		except:
+		except Exception as e:
+			#print(e)
 			pass
 
 	def getPrivateKey(self):
@@ -172,7 +172,8 @@ class Messenger(Screen):
 			eth_key = data["normal"]["password_(1)"]
 
 			return eth_key
-		except:
+		except Exception as e:
+			#print(e)
 			pass
 
 	# Cuando se preciona ejecutar, llegamos a esta funcion

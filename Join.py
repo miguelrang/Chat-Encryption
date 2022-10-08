@@ -237,8 +237,6 @@ class Join(Screen):
 			"sign":cert[3]
 		}
 
-		print(info)
-
 		# Creating certificate
 		with open(f"Certificados/{username}/user.cert", "w") as f:
 			f.write(str(info))
