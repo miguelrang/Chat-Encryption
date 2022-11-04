@@ -2,155 +2,77 @@ Login:
 	id: login
 	name: "login"
 
-	
-	Button: # return to home
-		size_hint: .05, .05
-		y: 510
-		background_color: 0, 0, 0, 0
-		on_release: app.root.current = "home"
-		Image:
-			name: "to_return"
-			source: "images/ToReturn.png"
-			center_x: self.parent.center_x
-			center_y: self.parent.center_y
-			size: 45, 45
-	
-	MDBoxLayout:
-		orientation: 'vertical'
-		md_bg_color: (32/255, 74/255, 93/255, 1)
-
-		Image:
-			allow_stretch: True
-			source: 'images/logo.png'
-
-		MDGridLayout:
-			cols: 2
-			size_hint: (1, .2)
-
-			MDFloatingActionButton:
-				icon: 'arrow-left-bold-circle'
-				elevation: 0
-				md_bg_color: (32/255, 74/255, 93/255, 1)
-				on_press: app.root.current = 'home'
-
-			MDLabel:
-				text: "[b][color=#FFFFFF]Iniciar Sesión[/color][/b]"
-				markup: True
-				halign: 'left'
-				valign: 'center'
-				font_size: dp(28)
+	FloatLayout:
+		id: bottom
+		name: 'bottom'
+		cols: 1
+		canvas.before:
+			Color:
+				rgba: (2/255, 232/255, 144/255, 1)
+			Rectangle:
+				size: self.size
+				pos: self.pos
+		canvas.after:
+			Color:
+				rgba: (1, 1, 1, 1)
+			Line:
+				rectangle: (20, bottom.size[1]*.02, 500, 650)
+				width: 1.5
 		
 		MDGridLayout:
 			cols: 1
-			padding: dp(5), dp(0), dp(5), dp(0)
-			spacing: dp(5)
-
-			MDFloatLayout:
-				id: m
-				name: 'm'
-				cols: 1
-
-				canvas.before:
-					Color:
-						rgba: (1, 1, 1, 1)
-					
-					RoundedRectangle:
-						size: self.size
-						pos: self.pos
-				
-				MDTextField:
-					id: username
-					name: 'username'
-
-					text: 'mike'
-					hint_text: 'Nombre de Usuario'
-					multiline: False
-					theme_text_color: 'Custom'
-					text_color: (0, 0, 0, 1)
-					line_color_normal: (0, 0, 0, 0)
-					line_color_focus: (0, 0, 0, 0)
-					pos_hint: {'center_x': .5, 'center_y': .35}
-					size_hint: (.9, 1.1)
-					canvas.after:
-						Color:
-							rgba: (0, 0, 0, 1)
-						Line:
-							rounded_rectangle: (m.pos[0], m.pos[1], m.size[0], m.size[1], 10, 10, 10, 10, 100)
-							width: 1
+			size_hint: 1, 1
+			#size: bottom.size[0]/2, bottom.size[1]*.95
+			#x: bottom.size[0]/2 - 20
+			pos_hint: {'center_x': .5, 'center_y': .5}
 			
-			MDFloatLayout:
-				id: n
-				name: 'n'
-				cols: 1
-
-				canvas.before:
-					Color:
-						rgba: (1, 1, 1, 1)
+			canvas.after:
+				Color:
+					rgba: (12/255, 19/255, 77/255, .8)
+				
+				RoundedRectangle:
+					size: self.size[0]-dp(10), self.size[1]-dp(15)
+					pos: self.pos[0]+dp(5), self.pos[1]+dp(7.5)
+					source: "images/hacker.png"	
 					
-					RoundedRectangle:
-						size: self.size
-						pos: self.pos
-				
-				MDTextField:
-					id: pass2
-					name: 'pass2'
+		MDBoxLayout:
+			orientation: 'vertical'
+			padding: dp(0), dp(0), dp(0), dp(5)
+			size_hint: None, None
+			size: 500, 650
+			x: 20
+			pos_hint: {'center_y': .5}
+			md_bg_color: (32/255, 74/255, 93/255, 1)
 
-					text: 'mikemike'
-					hint_text: 'Contraseña'
-					multiline: False
-					theme_text_color: 'Custom'
-					text_color: (0, 0, 0, 1)
-					line_color_normal: (0, 0, 0, 0)
-					line_color_focus: (0, 0, 0, 0)
-					pos_hint: {'center_x': .5, 'center_y': .35}
-					size_hint: (.9, 1.1)
-					canvas.after:
-						Color:
-							rgba: (0, 0, 0, 1)
-						Line:
-							rounded_rectangle: (n.pos[0], n.pos[1], n.size[0], n.size[1], 10, 10, 10, 10, 100)
-							width: 1
-			
-			MDFloatLayout:
-				id: o
-				name: 'o'
+			Image:
+				allow_stretch: True
+				source: 'images/logo.png'
 
-				cols: 1
-				canvas.before:
-					Color:
-						rgba: (1, 1, 1, 1)
-					
-					RoundedRectangle:
-						size: self.size
-						pos: self.pos
-				
-				MDTextField:
-					id: pass1
-					name: 'pass1'
-
-					text: 'mikemike'
-					hint_text: 'Contraseña de Ethereum'
-					multiline: False
-					theme_text_color: 'Custom'
-					text_color: (0, 0, 0, 1)
-					line_color_normal: (0, 0, 0, 0)
-					line_color_focus: (0, 0, 0, 0)
-					pos_hint: {'center_x': .5, 'center_y': .35}
-					size_hint: (.9, 1.1)
-					canvas.after:
-						Color:
-							rgba: (0, 0, 0, 1)
-						Line:
-							rounded_rectangle: (o.pos[0], o.pos[1], o.size[0], o.size[1], 10, 10, 10, 10, 100)
-							width: 1
-				
 			MDGridLayout:
 				cols: 2
-				spacing: dp(5)
-				MDFloatLayout:
-					id: x
-					name: 'x'
+				size_hint: (1, .2)
 
+				MDFloatingActionButton:
+					icon: 'arrow-left-bold-circle'
+					elevation: 0
+					md_bg_color: (32/255, 74/255, 93/255, 1)
+					on_press: app.root.current = 'home'
+
+				MDLabel:
+					text: "[b][color=#FFFFFF]Iniciar Sesión[/color][/b]"
+					markup: True
+					halign: 'left'
+					valign: 'center'
+					font_size: dp(28)
+			
+			MDGridLayout:
+				cols: 1
+				padding: dp(5), dp(0), dp(5), dp(0)
+				spacing: dp(5)
+
+				MDFloatLayout:
+					id: m
+					name: 'm'
 					cols: 1
 
 					canvas.before:
@@ -162,11 +84,11 @@ Login:
 							pos: self.pos
 					
 					MDTextField:
-						id: private_key_location
-						name: 'private_key_location'
+						id: username
+						name: 'username'
 
-						text: '/home/mike/Escritorio/private.key'
-						hint_text: "Directorio de su archivo 'private.key'"
+						text: '' # user_name
+						hint_text: 'Nombre de Usuario'
 						multiline: False
 						theme_text_color: 'Custom'
 						text_color: (0, 0, 0, 1)
@@ -174,35 +96,140 @@ Login:
 						line_color_focus: (0, 0, 0, 0)
 						pos_hint: {'center_x': .5, 'center_y': .35}
 						size_hint: (.9, 1.1)
-						on_focus:
-							if private_key_location.focus == True:\
-							private_key_location.focus = False, root.openDirectory()
-						
 						canvas.after:
 							Color:
 								rgba: (0, 0, 0, 1)
 							Line:
-								rounded_rectangle: (x.pos[0], x.pos[1], x.size[0], x.size[1], 10, 10, 10, 10, 100)
+								rounded_rectangle: (m.pos[0], m.pos[1], m.size[0], m.size[1], 10, 10, 10, 10, 100)
 								width: 1
 				
-				MDRaisedButton:
-					text: 'Buscar'
-					on_press:
-						root.openDirectory()
+				MDFloatLayout:
+					id: n
+					name: 'n'
+					cols: 1
+
+					canvas.before:
+						Color:
+							rgba: (1, 1, 1, 1)
+						
+						RoundedRectangle:
+							size: self.size
+							pos: self.pos
 					
-			MDRaisedButton:
-				id: log_in
-				name: 'log_in'
+					MDTextField:
+						id: pass1
+						name: 'pass1'
 
-				text: 'Iniciar Sesión'
-				size_hint: (1, 1)
-				on_press: 
-					root.login(username, pass1, pass2, private_key_location)
+						text: '' # 12345678
+						hint_text: 'Primera Contraseña'
+						multiline: False
+						theme_text_color: 'Custom'
+						text_color: (0, 0, 0, 1)
+						line_color_normal: (0, 0, 0, 0)
+						line_color_focus: (0, 0, 0, 0)
+						pos_hint: {'center_x': .5, 'center_y': .35}
+						size_hint: (.9, 1.1)
+						canvas.after:
+							Color:
+								rgba: (0, 0, 0, 1)
+							Line:
+								rounded_rectangle: (n.pos[0], n.pos[1], n.size[0], n.size[1], 10, 10, 10, 10, 100)
+								width: 1
+				
+				MDFloatLayout:
+					id: o
+					name: 'o'
+
+					cols: 1
+					canvas.before:
+						Color:
+							rgba: (1, 1, 1, 1)
+						
+						RoundedRectangle:
+							size: self.size
+							pos: self.pos
+					
+					MDTextField:
+						id: pass2
+						name: 'pass2'
+
+						text: '' # 12345678
+						hint_text: 'Segunda Contraseña'
+						multiline: False
+						theme_text_color: 'Custom'
+						text_color: (0, 0, 0, 1)
+						line_color_normal: (0, 0, 0, 0)
+						line_color_focus: (0, 0, 0, 0)
+						pos_hint: {'center_x': .5, 'center_y': .35}
+						size_hint: (.9, 1.1)
+						canvas.after:
+							Color:
+								rgba: (0, 0, 0, 1)
+							Line:
+								rounded_rectangle: (o.pos[0], o.pos[1], o.size[0], o.size[1], 10, 10, 10, 10, 100)
+								width: 1
+					
+				MDGridLayout:
+					cols: 2
+					spacing: dp(5)
+					MDFloatLayout:
+						id: x
+						name: 'x'
+
+						cols: 1
+
+						canvas.before:
+							Color:
+								rgba: (1, 1, 1, 1)
 							
-			MDRaisedButton:
-				id: clear
-				name: 'clear'
+							RoundedRectangle:
+								size: self.size
+								pos: self.pos
+						
+						MDTextField:
+							id: private_key_location
+							name: 'private_key_location'
 
-				text: 'Limpiar'
-				size_hint: (1, 1)
-				on_press: root.clear()
+							text: '' # /home/username/Desktop/private.key
+							hint_text: "Directorio de su archivo 'private.key'"
+							multiline: False
+							theme_text_color: 'Custom'
+							text_color: (0, 0, 0, 1)
+							line_color_normal: (0, 0, 0, 0)
+							line_color_focus: (0, 0, 0, 0)
+							pos_hint: {'center_x': .5, 'center_y': .35}
+							size_hint: (.9, 1.1)
+							on_focus:
+								if private_key_location.focus == True:\
+								root.openDirectory()
+								if private_key_location.focus == True:\
+								private_key_location.focus = False
+
+							canvas.after:
+								Color:
+									rgba: (0, 0, 0, 1)
+								Line:
+									rounded_rectangle: (x.pos[0], x.pos[1], x.size[0], x.size[1], 10, 10, 10, 10, 100)
+									width: 1
+					
+					MDRaisedButton:
+						text: 'Buscar'
+						on_press:
+							root.openDirectory()
+						
+				MDRaisedButton:
+					id: log_in
+					name: 'log_in'
+
+					text: 'Iniciar Sesión'
+					size_hint: (1, 1)
+					on_press: 
+						root.login(username, pass1, pass2, private_key_location)
+								
+				MDRaisedButton:
+					id: clear
+					name: 'clear'
+
+					text: 'Limpiar'
+					size_hint: (1, 1)
+					on_press: root.clear()

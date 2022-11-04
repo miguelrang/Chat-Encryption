@@ -42,7 +42,7 @@ class Login(Screen):
 		)
 		self.dialog.open()
 
-
+	######################################## CHOOSE FILE ################################
 	def selectFileFromDirectory(self, path):
 		path = path.replace('\\', '/')
 		#last = path.split('/')
@@ -65,49 +65,8 @@ class Login(Screen):
 
 		else:
 			self.directory.show('/home/')
+	#######################################################################################
 
-
-	def getCertificates(self):
-		certs = os.listdir("Certificados/")
-
-		return certs
-
-	def checkPassword(self, username:str, n:int, passn:str):
-		try:
-			with open(f"Certificados/{username}/user.cert", "r") as f:
-				content_file:str = f.read()
-
-			content_file = content_file.replace("'", "\"")
-			content_file = content_file.replace("b\"", "\"")
-
-			data = json.loads(content_file)
-
-
-			if n == 1:
-				if data["normal"]["password_(1)"] == passn:
-					password = True
-				else:
-					password = False
-
-			if n == 2:
-				if data["normal"]["password_(2)"] == passn:
-					password = True
-				else:
-					password = False
-		except:
-			password = False
-
-		return password
-
-
-	def verifyData(self, name):
-		folders = os.getdirs("Certificados")
-		if name in folders:
-			with open(f"Certificados/{name}/keys.key", "r") as f:
-				data = f.read()
-			data = data.replace("'", "\"")
-			information = json.loads(data)
-	
 
 	def login(self, username, pass1, pass2, private_key_location) -> None:
 		def emptyFields(username:str, pass1:str, pass2:str, private_key_location:str) -> bool:
@@ -122,36 +81,22 @@ class Login(Screen):
 				return True
 
 		def passwordMatch(username:str, pass1:str, pass2:str):
-			def correctPassword(username:str, n:int, passn:str):
-				try:
-					with open(f"Certificados/{username}/user.cert", "r") as f:
-						content_file:str = f.read()
+			try:
+				with open(f"Certificados/{username}/user.cert", "r") as f:
+					content_file:str = f.read()
 
-					content_file = content_file.replace("'", "\"")
-					content_file = content_file.replace("b\"", "\"")
+				content_file = content_file.replace("'", "\"")
+				content_file = content_file.replace("b\"", "\"")
 
-					data = json.loads(content_file)
+				data = json.loads(content_file)
 
 
-					if n == 1:
-						if data["normal"]["password_(1)"] == passn:
-							return True
-						else:
-							return False
-
-					if n == 2:
-						if data["normal"]["password_(2)"] == passn:
-							
-							return True
-						else:
-							return False
-				except:
+				if data["normal"]["password_(1)"] == pass1 and data["normal"]["password_(2)"] == pass2:
+					return True
+				else:
 					return False
 
-			if correctPassword(username, 1, pass1) and correctPassword(username, 2, pass2):
-				return True
-
-			else:
+			except:
 				return False
 
 		def getContentFile(path:str):
@@ -196,7 +141,7 @@ class Login(Screen):
 			return data['normal']['metamask']
 		###
 
-		if not emptyFields(self.ids.username.text, self.ids.pass1.text, self.ids.pass2.text, self.ids.private_key_location.text):			
+		if not emptyFields(username.text, pass1.text, pass2.text, private_key_location.text):			
 			if userExist(username.text):
 				if passwordMatch(username.text, pass1.text, pass2.text):
 					private_key_user:str = self.ids.private_key_location.text
@@ -204,30 +149,31 @@ class Login(Screen):
 					encrypted_key_user:str = getContentFile(private_key_user)
 					decrypted_key_user:str = ""
 					if encrypted_key_user != None:
-						decrypted_key_user = desencriptar(encrypted_key_user, len(self.ids.pass2.text))
+						decrypted_key_user = desencriptar(encrypted_key_user, len(pass2.text))
 					
 						# We repeat the "same"
-						encrypted_key_cert:str = locate_key(f"{os.getcwd()}/Certificados/{self.ids.username.text}/keys.key")
+						encrypted_key_cert:str = locate_key(f"{os.getcwd()}/Certificados/{username.text}/keys.key")
 						decrypted_key_cert:str = ""
 						if encrypted_key_cert != None:
-							decrypted_key_cert:str = desencriptar(encrypted_key_cert, len(self.ids.pass2.text))
+							decrypted_key_cert:str = desencriptar(encrypted_key_cert, len(pass2.text))
 
 							if decrypted_key_user != "" and decrypted_key_cert != "":
 						
 								if decrypted_key_user == decrypted_key_cert:
 									app.root.current = 'en_de'
 									app.resizeWindow(
-										size=(1200, 650),
-										left=1200,
+										size=(1200, 680),
+										left=100,
 										top=1
 									)
-									app.root.get_screen('en_de').ids.cuenta_eth.text = getMetamaskAccount(username.text)
+									app.root.get_screen('en_de').ids.sender.text = getMetamaskAccount(username.text)
+									app.root.get_screen('en_de').user = username.text
 									self.clear()
 
 								else:
 									self.openDialog(
-										title='Son diferentes',
-										text='Checalas'
+										title='Error',
+										text='Llave privada incorrecta.'
 									)
 
 							else:
@@ -275,5 +221,3 @@ class Login(Screen):
 		self.ids.pass1.disabled = False
 		self.ids.pass2.disabled = False
 		self.ids.private_key_location.disabled = False
-
-		self.ids.log_in.disabled = True

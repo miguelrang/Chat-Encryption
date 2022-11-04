@@ -15,6 +15,7 @@ import hashlib
 from Rot13 import *
 
 import os
+import re
 
 
 class Join(Screen):
@@ -41,40 +42,76 @@ class Join(Screen):
 		self.dialog.open()
 
 
-	def actionListener2(self): # gen_keys
-		##
-		# set the background color of the TextInput depending if
-		# this one is empty or not
-		if self.ids.username.text == "":
-			self.openDialog(
-				title='Atención',
-				text='Campo \'Nombre de Usuario\' vacío.'
-			)
-		else:
-			if self.ids.metamask.text == "":
-				self.openDialog(
-					title='Atención',
-					text='Campo \'Correo de Ethereum\' vacío.'
-				)
+	def validate(self, username, metamask, password, password2): # gen_keys
+		def userExist(username):
+			if username in os.listdir('Certificados/'):
+				return True
 			else:
-				if self.ids.password.text == "":
-					self.openDialog(
-						title='Atención',
-						text='Campo \'Contraseña de Ethereum\' vacío.'
-					)
-				else:
-					if self.ids.password2.text == "":
+				return False
+
+		def validMetamaskAccount(account:str):
+			if account == '':
+				return None
+			else:
+				if len(account) == 42:
+					if re.compile(r'0x([A-Z]|[a-z]|[0-9])+').fullmatch(account):
+						return True
+					else:
 						self.openDialog(
 							title='Atención',
-							text='Campo \'Contraseña (8 - 27 caracteres)\' vacío.'
+							text='Fórmato de cuenta invalido.'
+						)
+						return False
+				else:
+					self.openDialog(
+						title='Atención',
+						text='Longitud de la cuenta invalido, por favor corrobore que sea correcta.'
+					)
+					return False
+
+		if userExist(username.text) or username.text == '':
+			
+			if username.text == '':	
+				self.openDialog(
+					title='Atención',
+					text='Campo \'Nombre de Usuario\' vacío.'
+				)
+
+			elif userExist(username.text):
+				self.openDialog(
+					title='Atemción',
+					text='Este usuario ya existe.'
+				)
+
+		else:
+			if validMetamaskAccount(metamask.text) == False:
+				pass
+
+			elif validMetamaskAccount(metamask.text) == None:
+				self.openDialog(
+					title='Atención',
+					text='Campo \'Metamask\' vacío.'
+				)
+			else:
+				if password.text == "":
+					self.openDialog(
+						title='Atención',
+						text='Campo \'Primera Contraseña (8 - 27 caracteres)\' vacío.'
+					)
+				else:
+					if password2.text == "":
+						self.openDialog(
+							title='Atención',
+							text='Campo \'Segunda Contraseña (8 - 27 caracteres)\' vacío.'
 						)
 					else:
-						if len(self.ids.password2.text) > 7 and len(self.ids.password2.text) < 28:
+						if (len(password.text) > 7 and len(password.text) < 28) and (len(password2.text) > 7 and len(password2.text) < 28):
 							#text_inputs:list = [
-							#	self.ids.username.text,
-							#	self.ids.metamask.text,
-							#	self.ids.password.text
+							#	username.text,
+							#	metamask.text,
+							#	password.text
 							#]
+							
 							# RSA (keys)
 							self.private_key = RSA.generate(1024)
 							self.public_key = self.private_key.publickey()
@@ -86,17 +123,17 @@ class Join(Screen):
 							self.ids.save.disabled = False
 							# disabled
 							# TextInputs
-							self.ids.username.disabled = True
-							self.ids.metamask.disabled = True
-							self.ids.password.disabled = True
-							self.ids.password2.disabled = True
+							username.disabled = True
+							metamask.disabled = True
+							password.disabled = True
+							password2.disabled = True
 
 							self.ids.cert_information.hint_text = ''
 
 							# SHOW INFORMATION
-							username = f"Nombre de Usuario: {self.ids.username.text}"
-							metamask = f"Correo Electronico: {self.ids.metamask.text}"
-							password = f"Contraseña: **********"
+							username = f"Nombre de Usuario: {username.text}"
+							metamask = f"Cuenta: {metamask.text}"
+							password = f"Contraseñas: ********** & **********"
 							pub_key = f"Clave Publica: **********"
 							priv_key = f"Clave Privada: **********"
 																																																		  #
@@ -104,27 +141,29 @@ class Join(Screen):
 						else:
 							self.openDialog(
 								title='Atención',
-								text='Campo \'Contraseña (8 - 27 caracteres)\' vacío.'
+								text='La contraseña debe de tener entre 8 y 27 caracteres.'
 							)		
 
-	def empty(self):
+	def empty(self, username, metamask, password, password2, cert_information):
 		# empty
-		self.ids.username.text = ""
-		self.ids.metamask.text = ""
-		self.ids.password.text = ""
-		self.ids.password2.text = ""
-		self.ids.cert_information.text = ""
+		username.text = ""
+		metamask.text = ""
+		password.text = ""
+		password2.text = ""
+		cert_information.text = ""
+		
 		# hint_texts
-		self.ids.username.hint_text = "Nombre de Usuario"
-		self.ids.metamask.hint_text = "Correo de Ethereum"
-		self.ids.password.hint_text = "Contraseña de Ethereum"
-		self.ids.password2.hint_text = "Contraseña (8 - 27 caracteres)"
-		self.ids.cert_information.hint_text = 'Información del Usuario'
+		#username.hint_text = "Nombre de Usuario"
+		#metamask.hint_text = "Correo de Ethereum"
+		#password.hint_text = "Contraseña de Ethereum"
+		#password2.hint_text = "Contraseña (8 - 27 caracteres)"
+		#cert_information.hint_text = 'Información del Usuario'
+		
 		# disabled	
-		self.ids.username.disabled = False
-		self.ids.metamask.disabled = False
-		self.ids.password.disabled = False
-		self.ids.password2.disabled = False
+		username.disabled = False
+		metamask.disabled = False
+		password.disabled = False
+		password2.disabled = False
 		
 		self.ids.empty.disabled = True
 		self.ids.gen_keys.disabled = False
@@ -138,8 +177,7 @@ class Join(Screen):
 			#encr_pub_key:str = encr_pub_key.decode()
 			#print(encr_pub_key)
 
-			encr_priv_key:str = encriptar(self.private_key.export_key(),
-				len(self.ids.password2.text))
+			encr_priv_key:str = encriptar(self.private_key.export_key(), len(self.ids.password2.text))
 			encr_priv_key:bytes = b"".join(encr_priv_key)
 			#encr_priv_key:str = encr_priv_key.decode()
 
@@ -163,6 +201,24 @@ class Join(Screen):
 					path = path.replace('/Desktop/', '/Escritorio/')
 
 			return path
+
+		def getValidNameForTheFiles(path:str):
+			files = os.listdir(path)
+
+			n = 1
+			while True:
+				if (not 'private.key' in files) and (not 'public.key' in files):
+					return 'public.key', 'private.key'
+					break
+
+				elif (not f'private_({n}).key' in files) and (not f'public_({n}).key' in files):
+					return f'public_({n}).key', f'private_({n}).key'
+					break
+
+				else:
+					pass
+
+				n += 1
 
 		def genCert(info, normal_info:dict) -> tuple:
 			# E N C R Y P T
@@ -212,12 +268,12 @@ class Join(Screen):
 
 		# We save a copy of the ecnrypted keys for the user in the desktop
 		path = getPathOS(os.getcwd().replace('\\', '/').split('/'))
-		with open(f"{path}/private.key", "w") as f:
-			f.write(f"'private_key': {encrypted_keys['private_key']}")
-	
-		with open(f"{path}/public.key", "w") as f:
+		name = getValidNameForTheFiles(path)
+		with open(f"{path}/{name[0]}", "w") as f:
 			f.write(f"'public_key': {self.public_key}")
-		
+
+		with open(f"{path}/{name[1]}", "w") as f:
+			f.write(f"'private_key': {encrypted_keys['private_key']}")	
 		##
 		normal_info:dict = {
 			"user": username,
@@ -241,5 +297,7 @@ class Join(Screen):
 		with open(f"Certificados/{username}/user.cert", "w") as f:
 			f.write(str(info))
 		
-		self.empty() # Vacia los campos de la ventana
+		self.empty(self.ids.username, self.ids.metamask, self.ids.password, self.ids.password2, self.ids.cert_information) # Vacia los campos de la ventana
+		app.root.current = 'home'
 		#
+	

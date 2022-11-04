@@ -25,40 +25,16 @@ from Join import Join
 from Messenger import Messenger
 
 
+
+#from PIL import Image
+#img = Image.open(f'{os.getcwd()}/images/hacker.png')
+#img = img.resize((590, 640), Image.ANTIALIAS)
+#img.save('images/hacker.png')
+
+
 class WindowManager(ScreenManager):
 	def __init__(self, **kwargs):
 		super(WindowManager, self).__init__(**kwargs)
-
-# AQUI ES DONDE TOMAMOS EL ARCHIVO Y LO MANIPULAMOS
-class FChooser(Screen):
-	def __init__(self, **kwargs):
-		super(FChooser, self).__init__(**kwargs)
-		self.file_data = "" # bloquea y desbloquea el boton de agregar archivo dependiendo de su contenido
-		
-
-	def selected(self, file:list):
-
-		try: 
-			global direccion # marcamos como global la variable para guardar la direccion del archivo
-			global contenido # marcamos como global la variable donde guardamos el contenido
-			self.file_data = file[0]
-			
-			direccion = file[0]
-			with open(direccion, 'rb') as f:
-				
-				for byte in f.read(): # guardamos el contenido en una variable
-					contenido.append(byte)
-				
-			
-			
-		except:
-			self.file_data = ""
-
-		if self.file_data != "":
-			self.ids.adding.disabled = False
-
-		else:
-			self.ids.adding.disabled = True
 
 
 class main(MDApp):
@@ -85,15 +61,16 @@ class main(MDApp):
 	def on_start(self):
 		app = MDApp.get_running_app()
 		
-		app.root.current = 'home'
+		#app.root.current = 'join'
 
 		os.system('mkdir Certificados')
-		self.resizeWindow(
-			size=(500, 600),
-			left=400,
-			top=2
+		app.resizeWindow(
+			size=(1200, 680),
+			left=100,
+			top=1
 		)
 		
+# PARA QUE FUNCIONE, SE REQUIERE TENER INSTALADA GANACHE #
 
 ###################################################
 #                  P E N D I E N T E S            #
@@ -104,27 +81,14 @@ class main(MDApp):
 # 1.                                              #
 # ----------------------------------------------- #
 #                        J O I N                  #
-# 1. Validar que el usuario o cuenta ya haya sido #
-#    registrada.                                  #
-# 2. Validar si ya existe un archivo private.key o#
-#    public.key en el escritorio.                 #
-# 3. Agregar una expresión regular que valide que #
-#    se haya agregado una cuenta de metamask y su #
-#    contraseña.
+#                                                 #
 # ----------------------------------------------- #
 #                       L O G I N                 #
-# 1. Importar primary external storage.           #
-# 2. Solucionar error al presionar login.         #
-# 3. Agregar el nombre de usuario luego de login. #
+# 1.                                              #
 # ----------------------------------------------- #
 #                M E S S E N G E R                #
 # 1.                                              #
 ###################################################
 
 if __name__ == "__main__":
-	# variables globales para guardar los datos
-	global normal_info
-	normal_info = {}
-	direccion = '' # aqui guardamos la direccion
-	contenido = [] # aqui guardamos el contenido del archivo
 	main().run()
